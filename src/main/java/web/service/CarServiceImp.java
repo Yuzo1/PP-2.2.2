@@ -1,40 +1,31 @@
 package service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import model.Car;
-import dao.CarDao;
-import dao.CarDaoImp;
 
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import java.util.List;
 
-@Service
+@Component
 public class CarServiceImp implements CarService {
-    CarDao carDao = new CarDaoImp();
-    {
-            carDao.add(new Car("Skoda", "Octavia", 2013));
-            carDao.add(new Car("Renault", "Logan", 2015));
-            carDao.add(new Car("Lada", "Vesta", 2019));
-            carDao.add(new Car("Peugeot", "307", 2010));
-            carDao.add(new Car("SAAB", "9000", 1995));
-    }
-    @Override
-    public void add(Car car) {
-        carDao.add(car);
-    }
+    private List<Car> carList;
 
-    @Override
-    public List<Car> listCar() {
-        return carDao.listCars();
+    public CarServiceImp() {
+        carList = new ArrayList<>();
+        carList.add(new Car("Skoda", "Octavia", 2013));
+        carList.add(new Car("Renault", "Logan", 2015));
+        carList.add(new Car("Lada", "Vesta", 2019));
+        carList.add(new Car("Peugeot", "307", 2010));
+        carList.add(new Car("SAAB", "9000", 1995));
     }
-
     @Override
-    public List<Car> listCars() {
-        return carDao.listCars();
-    }
-
-    @Override
-    public List<Car> severalCars(int several) {
-        return carDao.severalCars(several);
+    public List<Car> severalCars(Integer count) {
+        if (count == null || count >= 5 || count <= 0) {
+            return carList;
+        } else {
+            return carList.stream().limit(count).collect(Collectors.toList());
+        }
     }
 }
